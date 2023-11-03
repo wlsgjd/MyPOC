@@ -24,7 +24,9 @@ BOOL ProtectThreadCreation(PVOID BaseAddr)
 	memset(BaseAddr, 0x00, PAGE_SIZE);
 #endif // REMOVE_ALL_HEADER
 
-	return VirtualProtect(BaseAddr, PAGE_SIZE, OldProtect, &OldProtect);
+	VirtualProtect(BaseAddr, PAGE_SIZE, OldProtect, &OldProtect);
+
+	return TRUE;
 }
 
 void _tmain()
