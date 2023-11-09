@@ -1,0 +1,77 @@
+;
+; PCTSample.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System ; TODO: specify appropriate Class
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=PCTSample.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+PCTSample_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+PCTSample.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%PCTSample.DeviceDesc%=PCTSample_Device, Root\PCTSample ; TODO: edit hw-id
+
+[PCTSample_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+PCTSample.sys
+
+;-------------- Service installation
+[PCTSample_Device.NT.Services]
+AddService = PCTSample,%SPSVCINST_ASSOCSERVICE%, PCTSample_Service_Inst
+
+; -------------- PCTSample driver install sections
+[PCTSample_Service_Inst]
+DisplayName    = %PCTSample.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\PCTSample.sys
+
+;
+;--- PCTSample_Device Coinstaller installation ------
+;
+
+[PCTSample_Device.NT.CoInstallers]
+AddReg=PCTSample_Device_CoInstaller_AddReg
+CopyFiles=PCTSample_Device_CoInstaller_CopyFiles
+
+[PCTSample_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[PCTSample_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[PCTSample_Device.NT.Wdf]
+KmdfService =  PCTSample, PCTSample_wdfsect
+[PCTSample_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "PCTSample Installation Disk"
+PCTSample.DeviceDesc = "PCTSample Device"
+PCTSample.SVCDESC = "PCTSample Service"
