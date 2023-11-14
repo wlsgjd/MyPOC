@@ -1,0 +1,77 @@
+;
+; ProcessObjType.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System ; TODO: specify appropriate Class
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=ProcessObjType.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+ProcessObjType_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+ProcessObjType.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%ProcessObjType.DeviceDesc%=ProcessObjType_Device, Root\ProcessObjType ; TODO: edit hw-id
+
+[ProcessObjType_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+ProcessObjType.sys
+
+;-------------- Service installation
+[ProcessObjType_Device.NT.Services]
+AddService = ProcessObjType,%SPSVCINST_ASSOCSERVICE%, ProcessObjType_Service_Inst
+
+; -------------- ProcessObjType driver install sections
+[ProcessObjType_Service_Inst]
+DisplayName    = %ProcessObjType.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\ProcessObjType.sys
+
+;
+;--- ProcessObjType_Device Coinstaller installation ------
+;
+
+[ProcessObjType_Device.NT.CoInstallers]
+AddReg=ProcessObjType_Device_CoInstaller_AddReg
+CopyFiles=ProcessObjType_Device_CoInstaller_CopyFiles
+
+[ProcessObjType_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[ProcessObjType_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[ProcessObjType_Device.NT.Wdf]
+KmdfService =  ProcessObjType, ProcessObjType_wdfsect
+[ProcessObjType_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "ProcessObjType Installation Disk"
+ProcessObjType.DeviceDesc = "ProcessObjType Device"
+ProcessObjType.SVCDESC = "ProcessObjType Service"
