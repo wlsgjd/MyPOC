@@ -1,6 +1,6 @@
 ﻿/*********************************************************
 				Name:			CopyCert
-				Author:			Jinhyeong,Choe (cshelldll)
+				Author:			Jinhyeong,Choe (wlsgjd)
 				Date:			2024.04.23
 				Description:	PE 인증서 복사 도구.
 **********************************************************/

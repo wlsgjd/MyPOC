@@ -1,6 +1,6 @@
 /*********************************************************
 				Name:			FileManager
-				Author:			Jinhyeong,Choe (cshelldll)
+				Author:			Jinhyeong,Choe (wlsgjd)
 				Date:			2024.04.23
 				Description:	File I/O Manager.
 **********************************************************/

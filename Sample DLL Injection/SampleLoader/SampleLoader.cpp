@@ -1,6 +1,6 @@
 ﻿/*********************************************************
 				Name:			SampleLoader
-				Author:			Jinhyeong,Choe (cshelldll)
+				Author:			Jinhyeong,Choe (wlsgjd)
 				Date:			2024.04.17
 				Description:	Sample DLL Injector
 **********************************************************/
